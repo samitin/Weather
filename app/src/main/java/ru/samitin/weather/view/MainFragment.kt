@@ -12,8 +12,9 @@ import com.google.android.material.snackbar.Snackbar
 import ru.samitin.weather.R
 import ru.samitin.weather.databinding.WeatherFragmentBinding
 import ru.samitin.weather.model.Weather
-import ru.samitin.weather.ui.main.MainViewModel
+
 import ru.samitin.weather.viewmodel.AppState
+import ru.samitin.weather.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
 
