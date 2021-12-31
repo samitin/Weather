@@ -1,8 +1,8 @@
-package ru.samitin.weather
+package ru.samitin.weather.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ru.samitin.weather.ui.main.MainFragment
+import ru.samitin.weather.R
 
 class MainActivity : AppCompatActivity() {
 

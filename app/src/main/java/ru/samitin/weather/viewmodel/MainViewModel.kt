@@ -1,10 +1,10 @@
-package ru.samitin.weather.ui.main
+package ru.samitin.weather.viewmodel
+
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.samitin.weather.model.Repository
 import ru.samitin.weather.model.RepositoryImpl
-import ru.samitin.weather.viewmodel.AppState
 import java.lang.Thread.sleep
 
 class MainViewModel(
