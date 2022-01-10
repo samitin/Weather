@@ -1,6 +1,7 @@
 package ru.samitin.weather.viewmodel
 
-import ru.samitin.weather.model.Weather
+import ru.samitin.weather.model.data.Weather
+
 
 sealed class AppState {
     data class Success(val weatherData:List<Weather>) : AppState()

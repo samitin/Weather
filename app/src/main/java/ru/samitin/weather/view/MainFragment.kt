@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import ru.samitin.weather.R
 import ru.samitin.weather.databinding.FragmentMainBinding
-import ru.samitin.weather.model.Weather
+import ru.samitin.weather.model.data.Weather
 import ru.samitin.weather.view.adapter.MainFragmentAdapter
 import ru.samitin.weather.viewmodel.AppState
 import ru.samitin.weather.viewmodel.MainViewModel
@@ -59,9 +59,11 @@ class MainFragment : Fragment() {
                 adapter.setWeather(appState.weatherData)
                 adapter.setOnClickWeaterListener(object :MainFragmentAdapter.OnClickWeaterListener{
                     override fun onClick(weather: Weather) {
+                        val bundle=Bundle()
+                        bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA,weather)
                         activity?.supportFragmentManager?.beginTransaction()?.
                                 addToBackStack(null)
-                            ?.add(R.id.container,DetailsFragment.newInstance(weather))
+                            ?.add(R.id.container,DetailsFragment.newInstance(bundle))
                             ?.commit()
                     }
                 })

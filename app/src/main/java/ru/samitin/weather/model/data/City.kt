@@ -1,4 +1,4 @@
-package ru.samitin.weather.model
+package ru.samitin.weather.model.data
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 

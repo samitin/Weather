@@ -1,60 +1,83 @@
 package ru.samitin.weather.view
 
-import androidx.lifecycle.ViewModelProvider
+
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
+import androidx.annotation.RequiresApi
 import ru.samitin.weather.R
-import ru.samitin.weather.databinding.WeatherFragmentBinding
-import ru.samitin.weather.model.Weather
-import ru.samitin.weather.viewmodel.AppState
-import ru.samitin.weather.viewmodel.MainViewModel
+import ru.samitin.weather.databinding.FragmentDetailsBinding
+import ru.samitin.weather.model.WeatherLoader
+import ru.samitin.weather.model.data.Weather
+import ru.samitin.weather.model.dto.WeatherDTO
 
+
+const val YOUR_API_KEY="4d955e52-f675-474f-b36b-5b579525ec73"
 class DetailsFragment : Fragment() {
 
+    private var _binding: FragmentDetailsBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var weatherBundle: Weather
+    private val onLoadListener: WeatherLoader.WeatherLoaderListener =
+        object : WeatherLoader.WeatherLoaderListener {
 
-    companion object {
-        const val WEATHER_KEY="WEATHER_KEY"
-        fun newInstance(weather:Weather):DetailsFragment{
-            val fragment= DetailsFragment()
-            val bundle=Bundle()
-            bundle.putParcelable(WEATHER_KEY,weather)
-            fragment.arguments=bundle
-            return fragment
+            override fun onLoaded(weatherDTO: WeatherDTO) {
+                displayWeather(weatherDTO)
+            }
+
+            override fun onFailed(throwable: Throwable) {
+                //Обработка ошибки
+            }
         }
-    }
 
-    private var _binding:WeatherFragmentBinding? =null
-    private val binding:WeatherFragmentBinding
-    get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding= WeatherFragmentBinding.inflate(inflater)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
 
-        setData(arguments?.getParcelable<Weather>(WEATHER_KEY) as Weather)
-    }
-    private fun setData(weatherData: Weather) {
-        binding.cityName.text = weatherData.city.city
-        binding.cityCoordinates.text = String.format(
-            getString(R.string.city_coordinates),
-            weatherData.city.lat.toString(),
-            weatherData.city.lon.toString()
-        )
-        binding.temperatureValue.text = weatherData.temperature.toString()
-        binding.feelsLikeValue.text = weatherData.feelsLike.toString()
+        binding.mainView.visibility = View.GONE
+        binding.loadingLayout.visibility = View.VISIBLE
+        val loader = WeatherLoader(onLoadListener, weatherBundle.city.lat, weatherBundle.city.lon)
+        loader.loadWeather()
     }
 
-    override fun onDestroyView() {
-        _binding=null;
-        super.onDestroyView()
+    private fun displayWeather(weatherDTO: WeatherDTO) {
+        with(binding) {
+            mainView.visibility = View.VISIBLE
+            loadingLayout.visibility = View.GONE
+            val city = weatherBundle.city
+            cityName.text = city.city
+            cityCoordinates.text = String.format(
+                getString(R.string.city_coordinates),
+                city.lat.toString(),
+                city.lon.toString()
+            )
+            weatherCondition.text = weatherDTO.fact?.condition
+            temperatureValue.text = weatherDTO.fact?.temp.toString()
+            feelsLikeValue.text = weatherDTO.fact?.feels_like.toString()
+        }
+    }
+
+    companion object {
+
+        const val BUNDLE_EXTRA = "weather"
+
+        fun newInstance(bundle: Bundle): DetailsFragment {
+            val fragment = DetailsFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 }

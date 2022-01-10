@@ -7,7 +7,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ru.samitin.weather.R
-import ru.samitin.weather.model.Weather
+import ru.samitin.weather.model.data.Weather
+
 
 class MainFragmentAdapter :RecyclerView.Adapter<MainFragmentAdapter.MainFragmentHolder>(){
 
