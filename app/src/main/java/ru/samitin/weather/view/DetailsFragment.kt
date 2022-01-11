@@ -15,7 +15,7 @@ import ru.samitin.weather.model.data.Weather
 import ru.samitin.weather.model.dto.WeatherDTO
 
 
-const val YOUR_API_KEY="4d955e52-f675-474f-b36b-5b579525ec73"
+
 class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null

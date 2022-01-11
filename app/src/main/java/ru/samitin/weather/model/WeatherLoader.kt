@@ -7,7 +7,7 @@ import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import ru.samitin.weather.BuildConfig
 import ru.samitin.weather.model.dto.WeatherDTO
-import ru.samitin.weather.view.YOUR_API_KEY
+
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.MalformedURLException
