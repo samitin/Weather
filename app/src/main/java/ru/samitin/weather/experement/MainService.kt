@@ -6,11 +6,19 @@ import android.util.Log
 
 private const val TAG="MainServiceTAG"
 const val MAIN_SERVICE_STRING_EXTRA = "MainServiceExtra"
+const val MAIN_SERVICE_INT_EXTRA = "MAIN_SERVICE_INT_EXTRA"
 
 class MainService (name: String = "MainService"): IntentService(name){
 
     override fun onHandleIntent(intent: Intent?) {
+        intent?.let { sendBack(it.getIntExtra(MAIN_SERVICE_INT_EXTRA,0).toString()) }
         createLogMassage("onHandleIntant ${intent?.getStringExtra(MAIN_SERVICE_STRING_EXTRA)}")
+    }
+
+    private fun sendBack(resoult: String) {
+        val broadcastIntent=Intent(TEST_BROADCAST_INTENT_FILTER)
+        broadcastIntent.putExtra(THREADS_FRAGMENT_BROADCAST_EXTRA,resoult)
+        sendBroadcast(broadcastIntent)
     }
 
     override fun onCreate() {

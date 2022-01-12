@@ -1,6 +1,9 @@
 package ru.samitin.weather.experement
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -9,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
 import kotlinx.android.synthetic.main.fragment_threads.*
@@ -17,12 +21,32 @@ import ru.samitin.weather.databinding.FragmentThreadsBinding
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
+const val TEST_BROADCAST_INTENT_FILTER="TEST_BROADCAST_INTENT_FILTER"
+const val THREADS_FRAGMENT_BROADCAST_EXTRA ="THREADS_FRAGMENT_BROADCAST_EXTRA"
 class ThreadsFragment : Fragment() {
 
     private var _binding: FragmentThreadsBinding? = null
     private val binding get() = _binding!!
     private var counterThread = 0
+    private val testReceiver:BroadcastReceiver = object : BroadcastReceiver(){
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.getStringExtra(THREADS_FRAGMENT_BROADCAST_EXTRA)?.let {
+                val tv=TextView(context)
+                tv.text=it
+                binding.mainContainer.addView(tv)
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context?.registerReceiver(testReceiver, IntentFilter(TEST_BROADCAST_INTENT_FILTER))
+    }
+
+    override fun onDestroy() {
+        context?.registerReceiver(testReceiver, IntentFilter(TEST_BROADCAST_INTENT_FILTER))
+        super.onDestroy()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,6 +110,17 @@ class ThreadsFragment : Fragment() {
         }
         //
         initServiceButton()
+        initServiceWithBroadcastButton()
+    }
+
+    private fun initServiceWithBroadcastButton() {
+        binding.serviceWithBroadcastButton.setOnClickListener {
+            context?.let {
+                it.startService(Intent(it,MainService::class.java).apply {
+                    putExtra(MAIN_SERVICE_INT_EXTRA,binding.editText.text.toString().toInt())
+                })
+            }
+        }
     }
 
     private fun initServiceButton(){
