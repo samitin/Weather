@@ -3,6 +3,7 @@ package ru.samitin.weather.experement
 import android.app.IntentService
 import android.content.Intent
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 private const val TAG="MainServiceTAG"
 const val MAIN_SERVICE_STRING_EXTRA = "MainServiceExtra"
@@ -15,10 +16,11 @@ class MainService (name: String = "MainService"): IntentService(name){
         createLogMassage("onHandleIntant ${intent?.getStringExtra(MAIN_SERVICE_STRING_EXTRA)}")
     }
 
-    private fun sendBack(resoult: String) {
-        val broadcastIntent=Intent(TEST_BROADCAST_INTENT_FILTER)
-        broadcastIntent.putExtra(THREADS_FRAGMENT_BROADCAST_EXTRA,resoult)
-        sendBroadcast(broadcastIntent)
+    //Отправка уведомления о завершении сервиса
+    private fun sendBack(result: String) {
+        val broadcastIntent = Intent(TEST_BROADCAST_INTENT_FILTER)
+        broadcastIntent.putExtra(THREADS_FRAGMENT_BROADCAST_EXTRA, result)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
 
     override fun onCreate() {
