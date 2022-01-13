@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+
 import android.view.Menu
 import android.view.MenuItem
 import ru.samitin.weather.R
