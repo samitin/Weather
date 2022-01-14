@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="city_name_margin_top">50dp</dimen>
+    <dimen name="city_name_margin_top">10dp</dimen>
+    <dimen name="town_header_height">100dp</dimen>
     <dimen name="margin_15_dp">15dp</dimen>
     <dimen name="temperature_value_text_size">40sp</dimen>
     <dimen name="feels_like_text_size">30sp</dimen>
@@ -14,17 +15,6 @@
     <dimen name="margin_5_dp">5dp</dimen>
 
     <dimen name="main_container_text_size">10sp</dimen>
-    <string name="threads">Threads</string>
-    <string name="in_main_thread">В главном потоке</string>
-    <string name="from_thread">Из потока %d</string>
-    <string name="in_thread">Выводим в потоке %s</string>
-    <string name="calculate_in_thread">Считаем в потоке %s</string>
-    <string name="my_handler_thread">My_Handler_Thread</string>
-    <string name="hello_from_thread_fragment">Hello from ThreadsFragment</string>
-    <string name="calculate">Расчёт</string>
-    <string name="default_number">1</string>
-    <string name="calc_in_thread">Расчёт в потоке</string>
-    <string name="handler_thread">Handler_Thread</string>
-    <string name="service">Service</string>
-    <string name="service_broadcast">Service + Broadcast</string>
+
+
 </resources>
