@@ -1,24 +1,18 @@
 package ru.samitin.weather.view
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import okhttp3.*
-import ru.samitin.weather.BuildConfig
 import ru.samitin.weather.R
 import ru.samitin.weather.databinding.FragmentDetailsBinding
 import ru.samitin.weather.model.data.Weather
-import ru.samitin.weather.model.dto.WeatherDTO
+import ru.samitin.weather.utils.showSnackBar
 import ru.samitin.weather.viewmodel.AppState
 import ru.samitin.weather.viewmodel.DetailsViewModel
-import java.io.IOException
 
 private const val PROCESS_ERROR = "Обработка ошибки"
 private const val MAIN_LINK = "https://api.weather.yandex.ru/v2/informers?"
@@ -31,10 +25,7 @@ class DetailsFragment : Fragment() {
     private lateinit var weatherBundle: Weather
     private val viewModel: DetailsViewModel by lazy { ViewModelProvider(this).get(DetailsViewModel::class.java) }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding= FragmentDetailsBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -42,8 +33,8 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
-        viewModel.getWeatherFromRemoteSource(MAIN_LINK + "lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}")
+        viewModel.detailsLiveData.observe(viewLifecycleOwner, Observer { renderData(it) })
+        viewModel.getWeatherFromRemoteSource(weatherBundle.city.lat, weatherBundle.city.lon)
     }
 
 
@@ -61,11 +52,15 @@ class DetailsFragment : Fragment() {
             is AppState.Error -> {
                 binding.mainView.visibility = View.VISIBLE
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar
-                    .make(binding.mainView, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.reload)) { viewModel.getWeatherFromRemoteSource(
-                        MAIN_LINK + "lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}") }
-                    .show()
+                binding.mainView.showSnackBar(
+                    getString(R.string.error),
+                    getString(R.string.reload),
+                    {
+                        viewModel.getWeatherFromRemoteSource(
+                            weatherBundle.city.lat,
+                            weatherBundle.city.lon
+                        )
+                    })
             }
         }
     }

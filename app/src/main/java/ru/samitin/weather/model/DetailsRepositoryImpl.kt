@@ -1,9 +1,14 @@
 package ru.samitin.weather.model
 
-import okhttp3.Callback
+
+import ru.samitin.weather.model.dto.WeatherDTO
 
 class DetailsRepositoryImpl(private val remoteDataSource: RemoteDataSource):DetailsRepository {
-    override fun getWeatherDetailsFromServer(requestLink: String, callback: Callback) {
-        remoteDataSource.getWeatherDetails(requestLink,callback)
+    override fun getWeatherDetailsFromServer(
+        lat: Double,
+        lon: Double,
+        callback: retrofit2.Callback<WeatherDTO>
+    ) {
+        remoteDataSource.getWeatherDetails(lat, lon, callback)
     }
 }
