@@ -1,5 +1,6 @@
 package ru.samitin.weather.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +16,14 @@ import ru.samitin.weather.view.adapter.MainFragmentAdapter
 import ru.samitin.weather.viewmodel.AppState
 import ru.samitin.weather.viewmodel.MainViewModel
 
+private const val IS_WORLD_KEY = "LIST_OF_TOWNS_KEY"
 class MainFragment : Fragment() {
-
+    private var isDataSetWorld:Boolean=false
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
     private val adapter = MainFragmentAdapter()
-    private var isDataSetRus: Boolean = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,17 +40,37 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getWeatherFromLocalSourceRus()
+        showListOfTowns()
+    }
+    private fun showListOfTowns(){
+        activity?.let {
+            if (it.getPreferences(Context.MODE_PRIVATE).getBoolean(IS_WORLD_KEY,false)){
+                changeWeatherDataSet()
+            }else{
+                viewModel.getWeatherFromLocalSourceRus()
+            }
+        }
     }
 
     private fun changeWeatherDataSet() {
-        if (isDataSetRus) {
-            viewModel.getWeatherFromLocalSourceWorld()
-            binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
-        } else {
+        if (isDataSetWorld) {
             viewModel.getWeatherFromLocalSourceRus()
             binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
+        } else {
+            viewModel.getWeatherFromLocalSourceWorld()
+            binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
         }
-        isDataSetRus = !isDataSetRus
+        isDataSetWorld = !isDataSetWorld
+        saveListOfTowns(isDataSetWorld)
+    }
+
+    private fun saveListOfTowns(dataSetWorld: Boolean) {
+        activity?.let {
+            with(it.getPreferences(Context.MODE_PRIVATE).edit()){
+                putBoolean(IS_WORLD_KEY,isDataSetWorld)
+                apply()
+            }
+        }
     }
 
     private fun renderData(appState: AppState) {
