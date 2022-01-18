@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
 import ru.samitin.weather.R
 import ru.samitin.weather.databinding.FragmentDetailsBinding
+import ru.samitin.weather.model.data.City
 import ru.samitin.weather.model.data.Weather
 import ru.samitin.weather.utils.showSnackBar
 import ru.samitin.weather.viewmodel.AppState
@@ -71,6 +72,7 @@ class DetailsFragment : Fragment() {
 
     private fun setWeather(weather: Weather) {
         val city = weatherBundle.city
+        saveCity(city,weather)
         binding.cityName.text = city.city
         binding.cityCoordinates.text = String.format(
             getString(R.string.city_coordinates),
@@ -84,12 +86,14 @@ class DetailsFragment : Fragment() {
         Glide.with(this).load("https://freepngimg.com/thumb/city/36275-3-city-hd.png").into(binding.headerIcon);
         weather.icon?.let {
 
-           /* GlideToVectorYou.justLoadImage(
-                activity,
-                Uri.parse("https://yastatic.net/weather/i/icons/blueye/color/svg/${it}.svg"),
-                weatherIcon
-            )*/
         }
+    }
+    private fun saveCity(city:City,weather: Weather){
+        viewModel.saveCityToDB(Weather(
+            city,
+            weather.temperature,
+            weather.feelsLike,
+            weather.condition))
     }
 
     override fun onDestroyView() {

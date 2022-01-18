@@ -8,8 +8,12 @@ import retrofit2.Response
 import ru.samitin.weather.model.DetailsRepository
 import ru.samitin.weather.model.DetailsRepositoryImpl
 import ru.samitin.weather.model.RemoteDataSource
+import ru.samitin.weather.model.data.Weather
 import ru.samitin.weather.model.dto.WeatherDTO
+import ru.samitin.weather.model.room.LocalRepository
+import ru.samitin.weather.model.room.LocalRepositoryImpl
 import ru.samitin.weather.utils.convertDtoToModel
+import ru.samitin.weather.view.app.App.Companion.getHistoryDao
 
 private const val SERVER_ERROR = "Ошибка сервера"
 private const val REQUEST_ERROR = "Ошибка запроса на сервер"
@@ -17,12 +21,17 @@ private const val CORRUPTED_DATA = "Неполные данные"
 
 class DetailsViewModel(
     val detailsLiveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val detailsRepositoryImpl: DetailsRepository = DetailsRepositoryImpl(RemoteDataSource())
+    private val detailsRepository: DetailsRepository = DetailsRepositoryImpl(RemoteDataSource()),
+    private val historyRepository: LocalRepository = LocalRepositoryImpl(getHistoryDao())
 ) : ViewModel() {
 
     fun getWeatherFromRemoteSource(lat: Double, lon: Double) {
         detailsLiveData.value = AppState.Loading
-        detailsRepositoryImpl.getWeatherDetailsFromServer(lat, lon, callBack)
+        detailsRepository.getWeatherDetailsFromServer(lat, lon, callBack)
+    }
+
+    fun saveCityToDB(weather: Weather) {
+        historyRepository.saveEntity(weather)
     }
 
     private val callBack = object :
