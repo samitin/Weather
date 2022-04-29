@@ -1,4 +1,4 @@
-package ru.samitin.weather.model
+package ru.samitin.weather.model.repository
 
 import ru.samitin.weather.model.data.Weather
 import ru.samitin.weather.model.data.getRussianCities

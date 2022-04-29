@@ -1,4 +1,4 @@
-package ru.samitin.weather.model
+package ru.samitin.weather.model.retrofit
 
 import android.os.Build
 import android.os.Handler

@@ -1,13 +1,12 @@
-package ru.samitin.weather.model
+package ru.samitin.weather.model.retrofit
 
 import com.google.gson.GsonBuilder
 import retrofit2.Callback
-
-
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.samitin.weather.BuildConfig
 import ru.samitin.weather.model.dto.WeatherDTO
+import ru.samitin.weather.model.retrofit.WeatherAPI
 
 private const val REQUEST_API_KEY = "X-Yandex-API-Key"
 class RemoteDataSource {

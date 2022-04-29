@@ -1,4 +1,4 @@
-package ru.samitin.weather.model
+package ru.samitin.weather.model.retrofit
 
 import retrofit2.Call
 import retrofit2.http.GET

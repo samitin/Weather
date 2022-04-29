@@ -5,11 +5,12 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.samitin.weather.model.DetailsRepository
-import ru.samitin.weather.model.DetailsRepositoryImpl
-import ru.samitin.weather.model.RemoteDataSource
+import ru.samitin.weather.model.repository.DetailsRepository
+import ru.samitin.weather.model.repository.DetailsRepositoryImpl
+
 import ru.samitin.weather.model.data.Weather
 import ru.samitin.weather.model.dto.WeatherDTO
+import ru.samitin.weather.model.retrofit.RemoteDataSource
 import ru.samitin.weather.model.room.LocalRepository
 import ru.samitin.weather.model.room.LocalRepositoryImpl
 import ru.samitin.weather.utils.convertDtoToModel
