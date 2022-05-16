@@ -9,8 +9,8 @@ const val TEMPERATURE = "temperature"
 @Entity
 data class HistoryEntity(
     @PrimaryKey(autoGenerate = true)
-    val id:Long = 0,
-    val city:String = "",
-    val temperature:Int = 0,
-    val condition:String = ""
+    var id:Long = 0,
+    var city:String = "",
+    var temperature:Int = 0,
+    var condition:String = ""
 )

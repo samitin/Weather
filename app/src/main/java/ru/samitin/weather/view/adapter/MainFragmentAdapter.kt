@@ -10,10 +10,12 @@ import ru.samitin.weather.R
 import ru.samitin.weather.model.data.Weather
 
 
-class MainFragmentAdapter :RecyclerView.Adapter<MainFragmentAdapter.MainFragmentHolder>(){
+class MainFragmentAdapter(
+    private var onClickWeaterListener:OnClickWeaterListener ? =null
+) :RecyclerView.Adapter<MainFragmentAdapter.MainFragmentHolder>(){
 
     private var weatherData= listOf<Weather>()
-    private var onClickWeaterListener:OnClickWeaterListener ? =null
+
     fun setWeather(data : List<Weather>){
         weatherData=data
         notifyDataSetChanged()
